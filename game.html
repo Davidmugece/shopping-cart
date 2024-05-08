@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plane Betting Game</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body, html {
+            height: 100%;
+        }
+        .container {
+            text-align: center;
+            margin-top: 50px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        #plane {
+            width: 200px;
+            margin-bottom: 20px;
+            position: relative;
+            transform: rotate(40deg);
+            transition: transform 0.1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="https://cdn-icons-png.flaticon.com/512/7893/7893979.png" alt="Plane" id="plane">
+    <button class="btn btn-primary" id="betButton">Bet</button>
+    <button class="btn btn-success" id="stopButton" style="display: none;">Stop</button>
+    <p>Points: <span id="points">0</span></p>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Custom JS -->
+<script>
+    // Function to start the game
+    function startGame() {
+        let points = 0;
+        let interval;
+
+        // Function to update points
+        function updatePoints() {
+            document.getElementById("points").textContent = points;
+        }
+
+        // Function to simulate plane flying
+        function flyPlane() {
+            document.getElementById("plane").src = "https://i.imgur.com/fGUEX9w.png";
+            document.getElementById("betButton").style.display = "none";
+            document.getElementById("stopButton").style.display = "inline-block";
+            interval = setInterval(() => {
+                // Randomly crash the plane
+                if (Math.random() < 0.1) {
+                    clearInterval(interval);
+                    document.getElementById("plane").src = "https://i.imgur.com/09c0KJ8.png";
+                    alert("Plane crashed! Game over.");
+                    points = 0;
+                    updatePoints();
+                    document.getElementById("betButton").style.display = "inline-block";
+                    document.getElementById("stopButton").style.display = "none";
+                } else {
+                    // Increment points while the plane is flying
+                    points++;
+                    updatePoints();
+                }
+            }, 100);
+        }
+
+        // Event listener for the bet button
+        document.getElementById("betButton").addEventListener("click", () => {
+            // Stop previous plane flight
+            clearInterval(interval);
+            // Start a new plane flight
+            flyPlane();
+        });
+
+        // Event listener for the stop button
+        document.getElementById("stopButton").addEventListener("click", () => {
+            clearInterval(interval);
+            alert("Points collected: " + points);
+            points = 0;
+            updatePoints();
+            document.getElementById("betButton").style.display = "inline-block";
+            document.getElementById("stopButton").style.display = "none";
+        });
+    }
+
+    // Start the game when the page loads
+    startGame();
+</script>
+
+</body>
+</html>
+
+
+
